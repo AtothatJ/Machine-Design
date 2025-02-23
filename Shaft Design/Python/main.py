@@ -15,7 +15,6 @@ sePrime = 0.5 * Sut
 def goodman_criteria_one():
     """
     Calculates the goodman criteria for questions 1-10.
-    The constants are assuming HR 1030 Steel material properties.
     """
     # Calculating K values
     a = 11
@@ -73,6 +72,15 @@ def vonmises_stress():
     print('The factor of safety calculated from the von Mises stress is : ' + str(safetyFactor))
 
 
+def goodman_criteria_two():
+    """
+    Calculates the goodman criteria for questions 21-30.
+    """
+    Nf = 1
+    print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
+
+
 if __name__ == "__main__":
     goodman_criteria_one()
     vonmises_stress()
+    goodman_criteria_two()
