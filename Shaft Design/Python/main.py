@@ -53,6 +53,7 @@ def vonmises_stress():
     Calculates the safety factor against first cycle yielding, using Von Mises.
     Questions 11-20
     """
+    kf = 1
 
     # Calculating bending stress
     sigma = kf * 32*moment / (pi*diameter**3)
@@ -67,7 +68,7 @@ def vonmises_stress():
     safetyFactor = Sy / sigmaPrime
 
     # Showing the answer to the user
-    print('The factor of safety calculated from the Goodman criteria is : ' + str(safetyFactor))
+    print('The factor of safety calculated from the von Mises stress is : ' + str(safetyFactor))
 
 if __name__ == "__main__":
     #goodman_criteria_one()
