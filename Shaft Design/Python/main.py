@@ -6,25 +6,31 @@ torque = 100
 diameter = 0.75
 reliability = 0.5
 
+# KT KTS values for sharp radius
+#Kt = 2.7
+#Kts = 2.2
+
+# KT KTS values for wide radius
+Kt = 1.7
+Kts = 1.5
+
 # Declaring material properties for 1030 machined steel
 Sut = 68  # ksi
 Sy = 42000
 sePrime = 0.5 * Sut
 
+
 def goodman_criteria_one():
     """
     Calculates the goodman criteria for questions 1-10. Assuming machined steel
     """
-    sharp = 0
-    if sharp == 1:
-        Kt = 2.7
-        Kts = 2.2
-    elif sharp == 0:
-        Kt = 1.7
-        Kts = 1.5
-    q =
-    Kf = Kt
-    Kfs = Kts
+    bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+    torsionalRootA = 0.190 - (135 * 10 ** -3) * Sut + (1.35 * 10 ** -6) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+    rootR = sqrt(diameter/2)
+    qBending = 1 / (1 + (bendingRootA / rootR))
+    qTorsional = 1 / (1 + (torsionalRootA / rootR))
+    Kf = 1 + (Kt * qBending)
+    Kfs = 1 + (Kts * qTorsional)
     SePrime = 0.5*Sut
     a = 2
     b = -0.217
