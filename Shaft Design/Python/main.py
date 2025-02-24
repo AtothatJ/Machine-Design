@@ -35,16 +35,17 @@ def goodman_criteria_one():
     a = 2
     b = -0.217
     Ka = a*Sut**b
-    Kb =
-    Kc =
-    Kd =
-    Ke =
+    kb = 0.879 * diameter ** -0.107
+    kc = 1
+    # Problem statement does not include a temp, so skipping Kd
+    za = 2.326
+    Ke = 1 - 0.08 * za
+    Se = ka * kb * kc * ke * sePrime
     Se = Ka * Kb * Kc * Kd * Ke * SePrime
     SigmaPrimeA = sqrt( (32*) )
     SigmaPrimeM = sqrt(  )
     # Calculating Goodman Criterion
     Nf = 1 / ((SigmaPrimeA / Se) + (SigmaPrimeM / Sut))
-
     # Showing the answer to the user
     print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
 
