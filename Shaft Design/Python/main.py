@@ -4,7 +4,6 @@ from math import pi, sqrt
 moment = 400
 torque = 100
 diameter = 0.75
-reliability = 0.5
 
 # KT KTS values for sharp radius
 #Kt = 2.7
@@ -15,7 +14,7 @@ Kt = 1.7
 Kts = 1.5
 
 # Declaring material properties for 1030 machined steel
-Sut = 68  # ksi
+Sut = 68 * 10 ** 3  # ksi
 Sy = 42000
 sePrime = 0.5 * Sut
 
@@ -34,18 +33,16 @@ def goodman_criteria_one():
     SePrime = 0.5*Sut
     a = 2
     b = -0.217
-    Ka = a*Sut**b
-    kb = 0.879 * diameter ** -0.107
-    kc = 1
-    # Problem statement does not include a temp, so skipping Kd
-    za = 2.326
-    Ke = 1 - 0.08 * za
-    Se = ka * kb * kc * ke * sePrime
+    Ka = a * Sut ** b
+    Kb = 0.879 * diameter ** -0.107
+    Kc = 1
+    Kd = 1
+    Ke = 1
     Se = Ka * Kb * Kc * Kd * Ke * SePrime
-    SigmaPrimeA = sqrt( (32*) )
-    SigmaPrimeM = sqrt(  )
+    sigmaPrimeA = sqrt(((32 * Kf * moment) ** 2 )/ (pi * diameter ** 3))
+    sigmaPrimeM = sqrt((3 * (16 * Kfs * torque) ** 2 /  (pi * diameter )**3))
     # Calculating Goodman Criterion
-    Nf = 1 / ((SigmaPrimeA / Se) + (SigmaPrimeM / Sut))
+    Nf = 1 / ((sigmaPrimeA / Se) + (sigmaPrimeM / Sut))
     # Showing the answer to the user
     print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
 
