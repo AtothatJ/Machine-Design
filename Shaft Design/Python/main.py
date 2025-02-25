@@ -5,17 +5,8 @@ def goodman_criteria_one():
     """
     Calculates the goodman criteria for questions 1-10
     """
-    # Calculating sqrt(a)
-    bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
-    torsionalRootA = 0.190 - (2.51 * 10 ** -3) * Sut + (1.35 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
-
-    # Calculating q values
-    qBending = 1 / (1 + (bendingRootA / rootR))
-    qTorsional = 1 / (1 + (torsionalRootA / rootR))
-
-    # converting Kt and Kts
-    Kf = 1 +  qBending * (Kt - 1)
-    Kfs = 1 + qTorsional * (Kts - 1)
+    Kf = kf()
+    Kfs = kfs()
 
     # Calculating K (a-e) values
     a = 2
@@ -31,7 +22,7 @@ def goodman_criteria_one():
 
     # Calculating stress components
     A = sqrt(4 * (Kf * moment) ** 2)
-    B = sqrt(3* (Kfs * torque) ** 2)
+    B = sqrt(3 * (Kfs * torque) ** 2)
 
     # Calculating safety factor
     Nf = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
@@ -45,10 +36,20 @@ def vonmises_stress():
     Calculates the safety factor against first cycle yielding, using Von Mises.
     Questions ___
     """
-    #
+    Kf = kf()
+    Kfs = kfs()
 
+    # Calculating sigma and Tau
+    sigma = (32 * Kf * moment) / (pi * diameter ** 3)
+    tau = (16 * Kfs * torque) / (pi * diameter ** 3)
+
+    # Calculating sigma ' max
+    sigmaPrimeMax = sqrt((sigma ** 2) + (3*tau**2))
+
+    # Calculating safety factor for von mises
+    Ny = Sy / sigmaPrimeMax
     # Showing the answer to the user
-    print('The factor of safety calculated from the von Mises stress is : ' + str(safetyFactor))
+    print('The factor of safety calculated from the von mises stress is : ' + str(Ny))
 
 
 def goodman_criteria_two():
@@ -57,6 +58,36 @@ def goodman_criteria_two():
     """
     Nf = 1
     print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
+
+
+def kf():
+    """
+    Calculates the bending fatigue stress-concentration
+    """
+    # Calculating sqrt(a)
+    bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+    # Calculating q values
+    qBending = 1 / (1 + (bendingRootA / rootR))
+
+    # converting Kt to Kf
+    Kf = 1 + qBending * (Kt - 1)
+    return Kf
+
+
+def kfs():
+    """
+    Calculates the torsional fatigue stress-concentration
+    """
+    # Calculating sqrt(a)
+    torsionalRootA = 0.190 - (2.51 * 10 ** -3) * Sut + (1.35 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+    # Calculating q values
+    qTorsional = 1 / (1 + (torsionalRootA / rootR))
+
+    # Converting Kts to Kfs
+    Kfs = 1 + qTorsional * (Kts - 1)
+    return Kfs
 
 
 if __name__ == "__main__":
@@ -69,7 +100,7 @@ if __name__ == "__main__":
     moment = int(input("Moment: ")) / 1000
     torque = int(input("Torque: ")) / 1000
     diameter = float(input("Diameter: "))
-    print("For sharp radius enter '0' for sharp radius enter '1'")
+    print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2")
     radiusType = eval(input("Radius: "))
     print("For the safety factor against fatigue using goodman, enter '1'")
     print("For the safety factor against first cycle yield using vonMises stresses, enter '2'")
@@ -87,6 +118,10 @@ if __name__ == "__main__":
         Kt = 1.7
         Kts = 1.5
         rootR = sqrt(diameter * 0.1)
+    elif radiusType == 2:
+        Kt = 2.14
+        Kts = 3.0
+        rootR = sqrt(diameter * 0.02)
 
     # Allowing the user to select a problem type
     if problemType == 1:
