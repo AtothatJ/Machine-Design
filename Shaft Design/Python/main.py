@@ -1,26 +1,5 @@
 from math import pi, sqrt
 
-# Declaring given info from the problem statement
-moment = 400/1000
-torque = 200/1000
-diameter = 1.5
-
-# Kt and Kts values from
-# KT KTS values for sharp radius
-#Kt = 2.7
-#Kts = 2.2
-#rootR = sqrt(diameter * 0.02)
-
-# KT KTS values for wide radius
-Kt = 1.7
-Kts = 1.5
-rootR = sqrt(diameter * 0.1)
-
-# Declaring material properties for 1030 machined steel
-Sut = 68 # ksi
-Sy = 37.5
-sePrime = 0.5 * Sut
-
 
 def goodman_criteria_one():
     """
@@ -81,6 +60,35 @@ def goodman_criteria_two():
 
 
 if __name__ == "__main__":
-    goodman_criteria_one()
-    vonmises_stress()
-    goodman_criteria_two()
+    # Declaring material properties for 1030 machined steel
+    Sut = 68  # ksi
+    Sy = 37.5
+    sePrime = 0.5 * Sut
+
+    moment = int(input("Moment: ")) / 1000
+    torque = int(input("Torque: ")) / 1000
+    diameter = float(input("Diameter: "))
+    print("For sharp radius enter '0' for sharp radius enter '1'")
+    radiusType = eval(input("Radius: "))
+    print("For the safety factor against fatigue using goodman, enter '1'")
+    print("For the safety factor against first cycle yield using vonMises stresses, enter '2'")
+    print("For the first cycle yield using conservative approximation and infinite life using the goodman criteria, enter '3'")
+    problemType = eval(input("Problem type: "))
+
+    if radiusType == 0:
+        # Sharp radius
+        Kt = 2.7
+        Kts = 2.2
+        rootR = sqrt(diameter * 0.02)
+    elif radiusType == 1:
+        # Wide radius
+        Kt = 1.7
+        Kts = 1.5
+        rootR = sqrt(diameter * 0.1)
+
+    if problemType == 1:
+        goodman_criteria_one()
+    elif problemType == 2:
+        vonmises_stress()
+    else:
+        goodman_criteria_two()
