@@ -75,6 +75,17 @@ def goodman_criteria_three():
     return Ny
 
 
+def goodman_criteria_four():
+    """
+    Question 21 - 30
+    """
+    sigma = 32 * moment / (pi * diameter ** 3)
+    tau = 16 * torque / (pi * diameter ** 3)
+    sigmaMain = sqrt(sigma ** 2 + tau ** 2)
+    Nf = sigmaMain
+    return Nf
+
+
 def kf():
     """
     Calculates the bending fatigue stress-concentration
@@ -117,12 +128,8 @@ if __name__ == "__main__":
     diameter = float(input("Diameter: "))
 
     # Accepting user input to select radius type
-    print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2")
+    print("\nFor... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2 \n\t Retaining clip: 3")
     radiusType = eval(input("Radius: "))
-    print("For the safety factor against fatigue using goodman, enter '1'")
-    print("For the safety factor against first cycle yield using vonMises stresses, enter '2'")
-    print("For the first cycle yield using conservative approximation and infinite life using the goodman criteria, "
-          "enter '3'")
 
     if radiusType == 0:
         # Sharp radius
@@ -138,15 +145,24 @@ if __name__ == "__main__":
         Kt = 2.14
         Kts = 3.0
         rootR = sqrt(diameter * 0.02)
+    elif radiusType == 4:
+        Kt = 5
+        Kts = 3
 
     # Allowing the user to select the problem type
+    print("\nFor... \n\tThe safety factor against fatigue using goodman: 0")
+    print("\tThe safety factor against first cycle yield using vonMises stresses: 1")
+    print("\tThe first cycle yield using conservative approximation and infinite life using the goodman criteria: 2")
+    print("\tThe minimum diameter required, using goodman criteria: 3")
     problemType = eval(input("Problem type: "))
 
-    if problemType == 1:
-        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_one()))
+    if problemType == 0:
+        print('\nThe factor of safety calculated from the Goodman criteria is: ' + str(goodman_criteria_one()))
+    elif problemType == 1:
+        print('\nThe factor of safety calculated from the von mises stress is: ' + str(vonmises_stress()))
     elif problemType == 2:
-        print('The factor of safety calculated from the von mises stress is : ' + str(vonmises_stress()))
+        print('\nThe factor of safety calculated from the Goodman criteria is: ' + str(goodman_criteria_two()))
     elif problemType == 3:
-        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_two()))
+        print('\nThe factor of safety calculated from the Goodman criteria is: ' + str(goodman_criteria_three()))
     elif problemType == 4:
-        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_three()))
+        print('\nThe minimum diameter required is: ' + str(goodman_criteria_four()))
