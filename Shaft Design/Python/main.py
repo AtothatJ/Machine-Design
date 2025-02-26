@@ -26,13 +26,12 @@ def goodman_criteria_one():
     # Calculating safety factor
     Nf = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
 
-    # Showing the answer to the user
-    print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
+    return Nf
 
 def vonmises_stress():
     """
     Calculates the safety factor against first cycle yielding, using Von Mises.
-    Questions ___
+    Questions 11 - 15
     """
     Kf = kf()
     Kfs = kfs()
@@ -46,18 +45,30 @@ def vonmises_stress():
 
     # Calculating safety factor for von mises
     Ny = Sy / sigmaPrimeMax
-    # Showing the answer to the user
-    print('The factor of safety calculated from the von mises stress is : ' + str(Ny))
+
+    return Ny
 
 def goodman_criteria_two():
     """
-    Calculates the goodman criteria for questions ____
+    Calculates the goodman criteria for questions 16 - 20
     """
 
     sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment)**2)
     sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque)**2)
     Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
-    print('The factor of safety calculated from the Goodman criteria is : ' + str(Ny))
+
+    return Ny
+
+def goodman_criteria_three():
+    """
+    Calculates the goodman criteria for questions 21 - 30
+    """
+
+    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment)**2)
+    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque)**2)
+    Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
+
+    return Ny
 
 def kf():
     """
@@ -93,7 +104,7 @@ if __name__ == "__main__":
     Sy = 37.5
     sePrime = 0.5 * Sut
 
-    # Accepting user input, data collected from problem statement
+    # Accepting user input, and data collected from problem statement
     moment = int(input("Moment: ")) / 1000
     torque = int(input("Torque: ")) / 1000
     diameter = float(input("Diameter: "))
@@ -104,7 +115,7 @@ if __name__ == "__main__":
     print("For the first cycle yield using conservative approximation and infinite life using the goodman criteria, enter '3'")
     problemType = eval(input("Problem type: "))
 
-    # Allowing the user to select sharp or wide radius
+    # Allowing the user to select sharp, wide radius, or keyway. The related values are also stored
     if radiusType == 0:
         # Sharp radius
         Kt = 2.7
@@ -122,8 +133,11 @@ if __name__ == "__main__":
 
     # Allowing the user to select a problem type
     if problemType == 1:
-        goodman_criteria_one()
+        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_one()))
     elif problemType == 2:
-        vonmises_stress()
+        print('The factor of safety calculated from the von mises stress is : ' + str(vonmises_stress()))
     elif problemType == 3:
-        goodman_criteria_two()
+        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_two()))
+    elif problemType == 4:
+        print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_three()))
+    
