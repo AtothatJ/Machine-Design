@@ -1,5 +1,6 @@
 from math import pi, sqrt
 
+
 def goodman_criteria_one():
     """
     Calculates the goodman criteria for questions 1-10
@@ -16,7 +17,7 @@ def goodman_criteria_one():
     Kd = 1
     Ke = 1
 
-    #calculating Se
+    # Calculating Se
     Se = Ka * Kb * Kc * Kd * Ke * sePrime
 
     # Calculating stress components
@@ -27,6 +28,7 @@ def goodman_criteria_one():
     Nf = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
 
     return Nf
+
 
 def vonmises_stress():
     """
@@ -41,34 +43,37 @@ def vonmises_stress():
     tau = (16 * Kfs * torque) / (pi * diameter ** 3)
 
     # Calculating sigma ' max
-    sigmaPrimeMax = sqrt((sigma ** 2) + (3*tau**2))
+    sigmaPrimeMax = sqrt((sigma ** 2) + (3 * tau ** 2))
 
     # Calculating safety factor for von mises
     Ny = Sy / sigmaPrimeMax
 
     return Ny
 
+
 def goodman_criteria_two():
     """
     Calculates the goodman criteria for questions 16 - 20
     """
 
-    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment)**2)
-    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque)**2)
+    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment) ** 2)
+    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque) ** 2)
     Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
 
     return Ny
+
 
 def goodman_criteria_three():
     """
     Calculates the goodman criteria for questions 21 - 30
     """
 
-    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment)**2)
-    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque)**2)
+    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment) ** 2)
+    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque) ** 2)
     Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
 
     return Ny
+
 
 def kf():
     """
@@ -84,6 +89,7 @@ def kf():
     Kf = 1 + qBending * (Kt - 1)
     return Kf
 
+
 def kfs():
     """
     Calculates the torsional fatigue stress-concentration
@@ -98,6 +104,7 @@ def kfs():
     Kfs = 1 + qTorsional * (Kts - 1)
     return Kfs
 
+
 if __name__ == "__main__":
     # Declaring material properties for 1030 HR steel (machined)
     Sut = 68  # ksi
@@ -108,14 +115,15 @@ if __name__ == "__main__":
     moment = int(input("Moment: ")) / 1000
     torque = int(input("Torque: ")) / 1000
     diameter = float(input("Diameter: "))
+
+    # Accepting user input to select radius type
     print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2")
     radiusType = eval(input("Radius: "))
     print("For the safety factor against fatigue using goodman, enter '1'")
     print("For the safety factor against first cycle yield using vonMises stresses, enter '2'")
-    print("For the first cycle yield using conservative approximation and infinite life using the goodman criteria, enter '3'")
-    problemType = eval(input("Problem type: "))
+    print("For the first cycle yield using conservative approximation and infinite life using the goodman criteria, "
+          "enter '3'")
 
-    # Allowing the user to select sharp, wide radius, or keyway. The related values are also stored
     if radiusType == 0:
         # Sharp radius
         Kt = 2.7
@@ -131,7 +139,9 @@ if __name__ == "__main__":
         Kts = 3.0
         rootR = sqrt(diameter * 0.02)
 
-    # Allowing the user to select a problem type
+    # Allowing the user to select the problem type
+    problemType = eval(input("Problem type: "))
+
     if problemType == 1:
         print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_one()))
     elif problemType == 2:
@@ -140,4 +150,3 @@ if __name__ == "__main__":
         print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_two()))
     elif problemType == 4:
         print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_three()))
-    
