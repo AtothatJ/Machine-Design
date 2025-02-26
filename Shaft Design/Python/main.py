@@ -1,6 +1,5 @@
 from math import pi, sqrt
 
-
 def goodman_criteria_one():
     """
     Calculates the goodman criteria for questions 1-10
@@ -30,7 +29,6 @@ def goodman_criteria_one():
     # Showing the answer to the user
     print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
 
-
 def vonmises_stress():
     """
     Calculates the safety factor against first cycle yielding, using Von Mises.
@@ -51,14 +49,15 @@ def vonmises_stress():
     # Showing the answer to the user
     print('The factor of safety calculated from the von mises stress is : ' + str(Ny))
 
-
 def goodman_criteria_two():
     """
     Calculates the goodman criteria for questions ____
     """
-    Nf = 1
-    print('The factor of safety calculated from the Goodman criteria is : ' + str(Nf))
 
+    sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf() * moment)**2)
+    sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs() * torque)**2)
+    Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
+    print('The factor of safety calculated from the Goodman criteria is : ' + str(Ny))
 
 def kf():
     """
@@ -74,7 +73,6 @@ def kf():
     Kf = 1 + qBending * (Kt - 1)
     return Kf
 
-
 def kfs():
     """
     Calculates the torsional fatigue stress-concentration
@@ -88,7 +86,6 @@ def kfs():
     # Converting Kts to Kfs
     Kfs = 1 + qTorsional * (Kts - 1)
     return Kfs
-
 
 if __name__ == "__main__":
     # Declaring material properties for 1030 HR steel (machined)
@@ -128,5 +125,5 @@ if __name__ == "__main__":
         goodman_criteria_one()
     elif problemType == 2:
         vonmises_stress()
-    else:
+    elif problemType == 3:
         goodman_criteria_two()
