@@ -70,6 +70,16 @@ def goodman_criteria_three():
 
     return Ny
 
+def question_type_four():
+    while True:
+        goodman_criteria_one()
+        goodman_criteria_two()
+        print(str(diameter))
+        if goodman_criteria_one() >= 1.5 and goodman_criteria_two() >= 1.5:
+            print("The minimum diameter is: " + str(diameter))
+        diameter += 0.01
+
+
 def kf():
     """
     Calculates the bending fatigue stress-concentration
@@ -105,6 +115,7 @@ if __name__ == "__main__":
     sePrime = 0.5 * Sut
 
     # Accepting user input, and data collected from problem statement
+    # Adjust for no diameter
     moment = int(input("Moment: ")) / 1000
     torque = int(input("Torque: ")) / 1000
     diameter = float(input("Diameter: "))
@@ -140,4 +151,7 @@ if __name__ == "__main__":
         print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_two()))
     elif problemType == 4:
         print('The factor of safety calculated from the Goodman criteria is : ' + str(goodman_criteria_three()))
+    elif problemType == 5:
+        Nf = eval(input('Safety Factor: '))
+        print('The estimated diameter is: ' + str(question_type_four()))
     
