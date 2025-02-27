@@ -16,7 +16,7 @@ def goodman_criteria_one():
     Kd = 1
     Ke = 1
 
-    #calculating Se
+    # Calculating Se
     Se = Ka * Kb * Kc * Kd * Ke * sePrime
 
     # Calculating stress components
@@ -27,6 +27,7 @@ def goodman_criteria_one():
     Nf = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
 
     return Nf
+
 
 def vonmises_stress():
     """
@@ -48,6 +49,7 @@ def vonmises_stress():
 
     return Ny
 
+
 def goodman_criteria_two():
     """
     Calculates the goodman criteria for questions 16 - 20
@@ -59,6 +61,7 @@ def goodman_criteria_two():
 
     return Ny
 
+
 def goodman_criteria_three():
     """
     Calculates the goodman criteria for questions 21 - 30
@@ -69,6 +72,7 @@ def goodman_criteria_three():
     Ny = Sy / (sigmaPrimeA + sigmaPrimeM)
 
     return Ny
+
 
 def question_type_four():
     while True:
