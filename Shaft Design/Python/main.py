@@ -1,5 +1,6 @@
 from math import pi, sqrt
 
+
 def get_user_input(problemType):
     """
     Handles user input radius type and related values.
@@ -12,26 +13,26 @@ def get_user_input(problemType):
     else:
         diameter = float(input("Diameter (in): "))
 
-    print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2"
-          " \n\t Retaining groove: 3")
+    print("For... \n\t Sharp Radius: 1  \n\t Wide Radius: 2 \n\t Keyway: 3"
+          " \n\t Retaining groove: 4")
     radiusType = int(input("Radius: "))
 
-    if radiusType == 0:
+    if radiusType == 1:
         Kt = 2.7
         Kts = 2.2
         rootR = sqrt(diameter * 0.02)
-    elif radiusType == 1:
+    elif radiusType == 2:
         Kt = 1.7
         Kts = 1.5
         rootR = sqrt(diameter * 0.1)
-    elif radiusType == 2:
+    elif radiusType == 3:
         Kt = 2.14
         Kts = 3.0
         rootR = sqrt(diameter * 0.02)
-    elif radiusType == 3:
+    elif radiusType == 4:
         Kt = 5
         Kts = 3
-        rootR = 5
+        rootR = sqrt(0.01)
     else:
         Kt = Kts = rootR = 0
 
@@ -40,7 +41,7 @@ def get_user_input(problemType):
 
 def goodman_criteria(moment, torque, diameter, Kt, Kts, rootR):
     """
-    Calculates the Goodman criteria for questions 1-10.
+    Calculates the factor of safety using Goodman criteria for questions 1-10.
     """
 
     # Calculating stress concentration factors
@@ -63,7 +64,7 @@ def goodman_criteria(moment, torque, diameter, Kt, Kts, rootR):
 
 def vonmises_stress(moment, torque, diameter, Kt, Kts, rootR):
     """
-    Calculates the safety factor against first cycle yielding, using Von Mises.
+    Calculates the safety factor against first cycle yielding using the full Von Mises.
     """
     Kf = kf(rootR, Kt)
     Kfs = kfs(rootR, Kts)
@@ -85,8 +86,10 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
 
     return Sy / (sigmaPrimeA + sigmaPrimeM)
 
+
 def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
     while True:
+
         goodman = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
         conservative = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
 
@@ -94,7 +97,7 @@ def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
             return diameter
 
         diameter += 0.01
-        rootR = sqrt(diameter*0.02)
+        rootR = sqrt(diameter * 0.02)
 
 
 def kf(rootR, Kt):
@@ -125,31 +128,34 @@ def main():
     2) Calls dependent methods for calculations
     3) Displays the final safety factor, or diameter
     """
+    question = 1
     while True:
-        print("For the safety factor against fatigue using Goodman, enter '1'")
-        print("For the safety factor against first cycle yield using Von Mises stresses, enter '2'")
-        print("For the first cycle yield using conservative approximation, enter '3'")
+        print("\nQuestion: " + str(question))
+        question += 1
+        print("For the safety factor against fatigue using Goodman: 1")
+        print("For the safety factor against first cycle yield using Von Mises stresses: 2")
+        print("For the first cycle yield using conservative approximation: 3")
         print("For the first cycle yield using conservative approximation and first cycle yield using the Goodman "
-              "criteria, enter '4'")
-        print("To exit the program, enter '0'")
+              "criteria: 4")
+        print("To exit the program: 0")
         problemType = int(input("Problem type: "))
 
         if problemType == 1:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
-            print('The factor of safety calculated from the Goodman criteria is:', result)
+            print('\nThe factor of safety calculated from the Goodman criteria is: ' + str(round(result, 4)) + "\n")
         elif problemType == 2:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = vonmises_stress(moment, torque, diameter, Kt, Kts, rootR)
-            print('The factor of safety calculated from the Von Mises stress is:', result)
+            print("The factor of safety calculated from the Von Mises stress is: " + str(round(result, 4)) + "\n")
         elif problemType == 3:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
-            print('The factor of safety calculated from the Goodman criteria is:', result)
+            print("The factor of safety calculated from the Goodman criteria is: " + str(round(result, 4)) + "\n")
         elif problemType == 4:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = (infinite_life(moment, torque, diameter, Kt, Kts, rootR))
-            print("The minimum diameter required is: " + str(result))
+            print("The minimum diameter required is: " + str(round(result, 4)) + "\n")
         elif problemType == 0:
             break
 
