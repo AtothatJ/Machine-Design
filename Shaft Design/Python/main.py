@@ -2,7 +2,7 @@ from math import pi, sqrt
 
 def get_user_input(problemType):
     """
-    Handles user input and stores the radius type, problem type, and related values.
+    Handles user input radius type and related values.
     """
     moment = float(input("Moment (lb-in): ")) / 1000
     torque = float(input("Torque (lb-in): ")) / 1000
@@ -128,7 +128,9 @@ def main():
     while True:
         print("For the safety factor against fatigue using Goodman, enter '1'")
         print("For the safety factor against first cycle yield using Von Mises stresses, enter '2'")
-        print("For the first cycle yield using conservative approximation and first cycle yield using the Goodman criteria, enter '3'")
+        print("For the first cycle yield using conservative approximation, enter '3'")
+        print("For the first cycle yield using conservative approximation and first cycle yield using the Goodman "
+              "criteria, enter '4'")
         print("To exit the program, enter '0'")
         problemType = int(input("Problem type: "))
 
@@ -147,7 +149,7 @@ def main():
         elif problemType == 4:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = (infinite_life(moment, torque, diameter, Kt, Kts, rootR))
-            print(result)
+            print("The minimum diameter required is: " + str(result))
         elif problemType == 0:
             break
 
