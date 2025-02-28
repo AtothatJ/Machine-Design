@@ -1,6 +1,5 @@
 from math import pi, sqrt
 
-
 def get_user_input(problemType):
     """
     Handles user input and stores the radius type, problem type, and related values.
@@ -86,15 +85,23 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
 
     return Sy / (sigmaPrimeA + sigmaPrimeM)
 
+def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
+    while True:
+        goodman = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
+        conservative = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
 
-def infinite_life():
-    
+        if goodman >= 1.5 and conservative >= 1.5:
+            return diameter
+
+        diameter += 0.01
+        rootR = sqrt(diameter*0.02)
 
 
 def kf(rootR, Kt):
     """
     Calculates the bending fatigue stress-concentration.
     """
+
     bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
     qBending = 1 / (1 + (bendingRootA / rootR))
     return 1 + qBending * (Kt - 1)
@@ -104,6 +111,7 @@ def kfs(rootR, Kts):
     """
     Calculates the torsional fatigue stress-concentration.
     """
+
     torsionalRootA = 0.190 - (2.51 * 10 ** -3) * Sut + (1.35 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
     qTorsional = 1 / (1 + (torsionalRootA / rootR))
     return 1 + qTorsional * (Kts - 1)
@@ -136,6 +144,10 @@ def main():
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
             result = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
             print('The factor of safety calculated from the Goodman criteria is:', result)
+        elif problemType == 4:
+            moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
+            result = (infinite_life(moment, torque, diameter, Kt, Kts, rootR))
+            print(result)
         elif problemType == 0:
             break
 
