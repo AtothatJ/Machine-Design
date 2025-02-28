@@ -13,25 +13,33 @@ def get_user_input(problemType):
     else:
         diameter = float(input("Diameter (in): "))
 
-    print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2")
+    print("For... \n\t Sharp Radius: 0  \n\t Wide Radius: 1 \n\t Keyway: 2"
+          " \n\t Retaining groove: 3")
     radiusType = int(input("Radius: "))
 
     if radiusType == 0:
-        Kt, Kts = 2.7, 2.2
+        Kt = 2.7
+        Kts = 2.2
         rootR = sqrt(diameter * 0.02)
     elif radiusType == 1:
-        Kt, Kts = 1.7, 1.5
+        Kt = 1.7
+        Kts = 1.5
         rootR = sqrt(diameter * 0.1)
     elif radiusType == 2:
-        Kt, Kts = 2.14, 3.0
+        Kt = 2.14
+        Kts = 3.0
         rootR = sqrt(diameter * 0.02)
+    elif radiusType == 3:
+        Kt = 5
+        Kts = 3
+        rootR = 5
     else:
         Kt = Kts = rootR = 0
 
     return moment, torque, diameter, Kt, Kts, rootR
 
 
-def goodman_criteria_one(moment, torque, diameter, Kt, Kts, rootR):
+def goodman_criteria(moment, torque, diameter, Kt, Kts, rootR):
     """
     Calculates the Goodman criteria for questions 1-10.
     """
@@ -97,23 +105,27 @@ def main():
     """
     Main execution function.
     """
+    while True:
+        print("For the safety factor against fatigue using Goodman, enter '1'")
+        print("For the safety factor against first cycle yield using Von Mises stresses, enter '2'")
+        print("For the first cycle yield using conservative approximation and first cycle yield using the Goodman criteria, enter '3'")
+        print("To exit the program, enter '0'")
+        problemType = int(input("Problem type: "))
 
-    print("For the safety factor against fatigue using Goodman, enter '1'")
-    print("For the safety factor against first cycle yield using Von Mises stresses, enter '2'")
-    print("For the first cycle yield using conservative approximation and first cycle yield using the Goodman criteria, enter '3'")
-
-    problemType = int(input("Problem type: "))
-    moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
-
-    if problemType == 1:
-        result = goodman_criteria_one(moment, torque, diameter, Kt, Kts, rootR)
-        print('The factor of safety calculated from the Goodman criteria is:', result)
-    elif problemType == 2:
-        result = vonmises_stress(moment, torque, diameter, Kt, Kts, rootR)
-        print('The factor of safety calculated from the Von Mises stress is:', result)
-    elif problemType == 3:
-        result = goodman_criteria_two(moment, torque, diameter, Kt, Kts, rootR)
-        print('The factor of safety calculated from the Goodman criteria is:', result)
+        if problemType == 1:
+            moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
+            result = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
+            print('The factor of safety calculated from the Goodman criteria is:', result)
+        elif problemType == 2:
+            moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
+            result = vonmises_stress(moment, torque, diameter, Kt, Kts, rootR)
+            print('The factor of safety calculated from the Von Mises stress is:', result)
+        elif problemType == 3:
+            moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
+            result = goodman_criteria_two(moment, torque, diameter, Kt, Kts, rootR)
+            print('The factor of safety calculated from the Goodman criteria is:', result)
+        elif problemType == 0:
+            break
 
 
 if __name__ == "__main__":
