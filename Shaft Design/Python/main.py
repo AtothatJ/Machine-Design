@@ -97,10 +97,6 @@ def main():
     """
     Main execution function.
     """
-    global Sut, Sy, sePrime
-    Sut = 68  # ksi
-    Sy = 37.5
-    sePrime = 0.5 * Sut
 
     print("For the safety factor against fatigue using Goodman, enter '1'")
     print("For the safety factor against first cycle yield using Von Mises stresses, enter '2'")
@@ -121,4 +117,7 @@ def main():
 
 
 if __name__ == "__main__":
+    Sut = 68  # ksi
+    Sy = 37.5
+    sePrime = 0.5 * Sut
     main()
