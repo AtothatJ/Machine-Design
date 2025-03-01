@@ -101,7 +101,7 @@ def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
         print("Goodman: " + str(goodman) + "\tdiameter: " + str(diameter))
         print("conservative: " + str(conservative) + "\tdiameter: " + str(diameter))
         if goodman >= 1.5 and conservative >= 1.5:
-            return diameter
+                return diameter
 
         diameter += 0.00001
         rootR = sqrt(diameter * 0.02)
