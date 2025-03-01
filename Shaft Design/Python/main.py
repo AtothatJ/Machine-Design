@@ -13,28 +13,30 @@ def get_user_input(problemType):
     else:
         diameter = float(input("Diameter (in): "))
 
-    print("For... \n\t Sharp Radius: 1  \n\t Wide Radius: 2 \n\t Keyway: 3"
-          " \n\t Retaining groove: 4")
-    radiusType = int(input("Radius: "))
+    if problemType == 1 or problemType == 2 or problemType == 3:
+        print("For... \n\t Sharp Radius: 1  \n\t Wide Radius: 2 \n\t Keyway: 3"
+              " \n\t Retaining groove: 4")
+        radiusType = int(input("Radius: "))
 
-    if radiusType == 1:
-        Kt = 2.7
-        Kts = 2.2
-        rootR = sqrt(diameter * 0.02)
-    elif radiusType == 2:
-        Kt = 1.7
-        Kts = 1.5
-        rootR = sqrt(diameter * 0.1)
-    elif radiusType == 3:
-        Kt = 2.14
-        Kts = 3.0
-        rootR = sqrt(diameter * 0.02)
-    elif radiusType == 4:
-        Kt = 5
-        Kts = 3
-        rootR = sqrt(0.01)
-    else:
-        Kt = Kts = rootR = 0
+        if radiusType == 1:
+            Kt = 2.7
+            Kts = 2.2
+            rootR = sqrt(diameter * 0.02)
+        elif radiusType == 2:
+            Kt = 1.7
+            Kts = 1.5
+            rootR = sqrt(diameter * 0.1)
+        elif radiusType == 3:
+            Kt = 2.14
+            Kts = 3.0
+            rootR = sqrt(diameter * 0.02)
+        elif radiusType == 4:
+            Kt = 5
+            Kts = 3
+            rootR = sqrt(0.01)
+        else:
+            Kt = Kts = rootR = 0
+    else: Kt = Kts = rootR = 0
 
     return moment, torque, diameter, Kt, Kts, rootR
 
@@ -59,7 +61,8 @@ def goodman_criteria(moment, torque, diameter, Kt, Kts, rootR):
     A = sqrt(4 * (Kf * moment) ** 2)
     B = sqrt(3 * (Kfs * torque) ** 2)
 
-    return ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
+    Nf = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
+    return Nf
 
 
 def vonmises_stress(moment, torque, diameter, Kt, Kts, rootR):
@@ -91,20 +94,81 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
     return Sy / (sigmaPrimeA + sigmaPrimeM)
 
 
-def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
+def infinite_life(moment, torque, diameter):
     # Setting up an iterative approach to this problem set
-    while True:
-        # Calculating the goodman and conservative approach for
-        goodman = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
-        conservative = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
+    print("For... \n\t Sharp Radius: 1  \n\t Wide Radius: 2 \n\t Keyway: 3"
+          " \n\t Retaining groove: 4")
+    radiusType = int(input("Radius: "))
 
-        print("Goodman: " + str(goodman) + "\tdiameter: " + str(diameter))
-        print("conservative: " + str(conservative) + "\tdiameter: " + str(diameter))
+    while True:
+        if radiusType == 1:
+            Kt = 2.7
+            Kts = 2.2
+            rootR = sqrt(diameter * 0.02)
+        elif radiusType == 2:
+            Kt = 1.7
+            Kts = 1.5
+            rootR = sqrt(diameter * 0.1)
+        elif radiusType == 3:
+            Kt = 2.14
+            Kts = 3.0
+            rootR = sqrt(diameter * 0.02)
+        elif radiusType == 4:
+            Kt = 5
+            Kts = 3
+            rootR = sqrt(0.01)
+        else:
+            Kt = Kts = rootR = 0
+
+        # Calculating sqrt(a)
+        torsionalRootA = 0.190 - (2.51 * 10 ** -3) * Sut + (1.35 * 10 ** -5) * Sut ** 2 - (
+                    2.67 * 10 ** -8) * Sut ** 3
+
+        # Calculating the notch sensitivity factor
+        qTorsional = 1 / (1 + (torsionalRootA / rootR))
+        Kfs = 1 + qTorsional * (Kts - 1)
+
+        # Goodman approach
+        a, b = 2, -0.217
+        Ka = a * Sut ** b
+        Kb = 0.879 * diameter ** -0.107
+        Kc = Kd = Ke = 1
+        Se = Ka * Kb * Kc * Kd * Ke * sePrime
+
+        # Calculating sqrt(a)
+        bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+        # Calculating the notch sensitivity factor
+        qBending = 1 / (1 + (bendingRootA / rootR))
+        Kf = 1 + qBending * (Kt - 1)
+
+        # Calculating sqrt(a)
+        bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+        # Calculating the notch sensitivity factor
+        qBending = 1 / (1 + (bendingRootA / rootR))
+        1 + qBending * (Kt - 1)
+
+
+
+        # Calculating mean and alternating stress
+        A = sqrt(4 * (Kf * moment) ** 2)
+        B = sqrt(3 * (Kfs * torque) ** 2)
+
+        goodman = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
+
+        # Conservative approach
+        sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (Kf * moment) ** 2)
+        sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (Kfs * torque) ** 2)
+        conservative = Sy / (sigmaPrimeA + sigmaPrimeM)
+
+
+        #print("Goodman: " + str(goodman) + "\tdiameter: " + str(diameter))
+        #print("conservative: " + str(conservative) + "\tdiameter: " + str(diameter))
         if goodman >= 1.5 and conservative >= 1.5:
                 return diameter
 
         diameter += 0.00001
-        rootR = sqrt(diameter * 0.02)
 
 
 def kf(rootR, Kt):
@@ -116,7 +180,6 @@ def kf(rootR, Kt):
 
     # Calculating the notch sensitivity factor
     qBending = 1 / (1 + (bendingRootA / rootR))
-
     return 1 + qBending * (Kt - 1)
 
 
@@ -163,7 +226,7 @@ def main():
             print("The factor of safety calculated from the Goodman criteria is: " + str(round(result, 4)) + "\n")
         elif problemType == 4:
             moment, torque, diameter, Kt, Kts, rootR = get_user_input(problemType)
-            result = (infinite_life(moment, torque, diameter, Kt, Kts, rootR))
+            result = (infinite_life(moment, torque, diameter))
             print("The minimum diameter required is: " + str(round(result, 4)) + "\n")
         elif problemType == 0:
             break
