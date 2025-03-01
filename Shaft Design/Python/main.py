@@ -66,9 +66,12 @@ def vonmises_stress(moment, torque, diameter, Kt, Kts, rootR):
     """
     Calculates the safety factor against first cycle yielding using the full Von Mises.
     """
+
+    # Calculating stress concentration factors
     Kf = kf(rootR, Kt)
     Kfs = kfs(rootR, Kts)
 
+    # Setting up von mises calculation
     sigma = (32 * Kf * moment) / (pi * diameter ** 3)
     tau = (16 * Kfs * torque) / (pi * diameter ** 3)
 
@@ -81,6 +84,7 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
     """
     Calculates the safety factor of first cycle yielding using the conservative approximation for questions 16-20.
     """
+    # Setting up conservative approximation
     sigmaPrimeA = (16 / (pi * diameter ** 3)) * sqrt(4 * (kf(rootR, Kt) * moment) ** 2)
     sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (kfs(rootR, Kts) * torque) ** 2)
 
@@ -88,8 +92,9 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
 
 
 def infinite_life(moment, torque, diameter, Kt, Kts, rootR):
+    # Setting up an iterative approach to this problem set
     while True:
-
+        # Calculating the goodman and conservative approach for
         goodman = goodman_criteria(moment, torque, diameter, Kt, Kts, rootR)
         conservative = conservative_approximation(moment, torque, diameter, Kt, Kts, rootR)
 
@@ -106,9 +111,12 @@ def kf(rootR, Kt):
     """
     Calculates the bending fatigue stress-concentration.
     """
-
+    # Calculating sqrt(a)
     bendingRootA = 0.246 - (3.08 * 10 ** -3) * Sut + (1.51 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+    # Calculating the notch sensitivity factor
     qBending = 1 / (1 + (bendingRootA / rootR))
+
     return 1 + qBending * (Kt - 1)
 
 
@@ -116,8 +124,10 @@ def kfs(rootR, Kts):
     """
     Calculates the torsional fatigue stress-concentration.
     """
-
+    # Calculating sqrt(a)
     torsionalRootA = 0.190 - (2.51 * 10 ** -3) * Sut + (1.35 * 10 ** -5) * Sut ** 2 - (2.67 * 10 ** -8) * Sut ** 3
+
+    # Calculating the notch sensitivity factor
     qTorsional = 1 / (1 + (torsionalRootA / rootR))
     return 1 + qTorsional * (Kts - 1)
 
@@ -130,10 +140,7 @@ def main():
     2) Calls dependent methods for calculations
     3) Displays the final safety factor, or diameter
     """
-    question = 1
     while True:
-        print("\nQuestion: " + str(question))
-        question += 1
         print("For the safety factor against fatigue using Goodman: 1")
         print("For the safety factor against first cycle yield using Von Mises stresses: 2")
         print("For the first cycle yield using conservative approximation: 3")
@@ -163,7 +170,10 @@ def main():
 
 
 if __name__ == "__main__":
+    # Declaring material constants
     Sut = 68  # ksi
     Sy = 37.5
     sePrime = 0.5 * Sut
+
+    # Calling driving method for the script
     main()
