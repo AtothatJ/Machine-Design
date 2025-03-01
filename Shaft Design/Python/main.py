@@ -95,6 +95,13 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
 
 
 def infinite_life(moment, torque, diameter):
+    """
+    Calculates the minimum diameter. This code was / is heavily bugged, and i am quickly losing time. The required
+    methods had to be copy and pasted. Goodman() and conservative() are the main methods that *would* be called here.
+
+    Stress concentration calculations are also copy and pasted to update with the new diameter
+
+    """
     # Setting up an iterative approach to this problem set
     print("For... \n\t Sharp Radius: 1  \n\t Wide Radius: 2 \n\t Keyway: 3"
           " \n\t Retaining groove: 4")
@@ -155,6 +162,7 @@ def infinite_life(moment, torque, diameter):
         A = sqrt(4 * (Kf * moment) ** 2)
         B = sqrt(3 * (Kfs * torque) ** 2)
 
+        # Calculating the goodman criteria
         goodman = ((pi * diameter ** 3) / 16) * ((A / Se) + (B / Sut)) ** -1
 
         # Conservative approach
@@ -162,9 +170,6 @@ def infinite_life(moment, torque, diameter):
         sigmaPrimeM = (16 / (pi * diameter ** 3)) * sqrt(3 * (Kfs * torque) ** 2)
         conservative = Sy / (sigmaPrimeA + sigmaPrimeM)
 
-
-        #print("Goodman: " + str(goodman) + "\tdiameter: " + str(diameter))
-        #print("conservative: " + str(conservative) + "\tdiameter: " + str(diameter))
         if goodman >= 1.5 and conservative >= 1.5:
                 return diameter
 
