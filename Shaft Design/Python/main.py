@@ -96,7 +96,7 @@ def conservative_approximation(moment, torque, diameter, Kt, Kts, rootR):
 
 def infinite_life(moment, torque, diameter):
     """
-    Calculates the minimum diameter. This code was / is heavily bugged, and i am quickly losing time. The required
+    Calculates the minimum diameter. This code was / is heavily bugged, and I am quickly losing time. The required
     methods had to be copy and pasted. Goodman() and conservative() are the main methods that *would* be called here.
 
     Stress concentration calculations are also copy and pasted to update with the new diameter
