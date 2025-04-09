@@ -4,13 +4,13 @@ from numpy import pi
 def user_inputs():
     """
     Accepts user input, then calls the corresponding method of calculation. Features a while loop to keep the user from
-    re-running the script, and a try
-    :return:
+    re-running the script. Also features a try statement incase a user inputs the wrong type of value
     """
+
     while True:
-        print("Please input the number of the section you would like to calculate")
+        print("\nPlease input the number of the section you would like to calculate")
         print("\tPower requirements: 1")
-        print("\tSomething else: 2")
+        print("\tShaft Analysis (fatigue and static): 2")
         print("\tEnd script: 0")
 
         try:
@@ -46,6 +46,10 @@ def power_requirements():
 
     print("Input Torque: " + str(Ti))
     print("Output Torque: " + str(To))
+
+def shaft_fatigue():
+    
+    return
 
 
 if __name__ == '__main__':
