@@ -47,9 +47,8 @@ def power_requirements():
     print("Input Torque: " + str(Ti))
     print("Output Torque: " + str(To))
 
-def shaft_fatigue():
+def analysis():
     
-    return
 
 
 if __name__ == '__main__':
